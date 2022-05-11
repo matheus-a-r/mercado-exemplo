@@ -18,7 +18,7 @@ public class Sistema {
 		String idPao = catalogo.addProduto(pao);
 		String idOvo = catalogo.addProduto(ovo);
 		Produto novoLeite = catalogo.getProduto(idLeite);
-		novoLeite.setFabricante("Italac");
+		novoLeite.setFabricante("Italacc");
 		catalogo.atualizaProduto(novoLeite);
 		System.out.println(catalogo.listaProdutos());
 	}
