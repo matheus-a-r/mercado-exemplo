@@ -1,25 +1,40 @@
-import exemplo.Lote;
-import exemplo.Produto;
-import exemplo.ProdutoRepository;
-import exemplo.LoteRepository;
+import java.util.List;
+
+import models.Lote;
+import models.Produto;
+import repositories.LoteRepository;
+import repositories.ProdutoRepository;
+import services.LoteService;
+import services.ProdutoService;
 
 public class Sistema {
 
+	private static LoteRepository loteRep = new LoteRepository();
+	private static ProdutoRepository prodRep = new ProdutoRepository();
+	private static LoteService loteService = new LoteService(loteRep);
+	private static ProdutoService prodService = new ProdutoService(loteRep, prodRep);
+
 	public static void main(String[] args) {
 
-		Produto leite = new Produto("Leite", "Parmalat");
-		Produto pao = new Produto("Pão", "Poli Massas");
-		Produto ovo = new Produto("Ovo", "Granja Comary");
-		Lote loteLeite = new Lote(leite, 10L);
-		Lote lotePao = new Lote(pao, 30L);
-		Lote loteOvo = new Lote(ovo, 20L);
-		ProdutoRepository catalogo = new ProdutoRepository();
-		String idLeite = catalogo.addProduto(leite);
-		String idPao = catalogo.addProduto(pao);
-		String idOvo = catalogo.addProduto(ovo);
-		Produto novoLeite = catalogo.getProduto(idLeite);
-		novoLeite.setFabricante("Italacc");
-		catalogo.atualizaProduto(novoLeite);
-		System.out.println(catalogo.listaProdutos());
+
+		Produto p1 = new Produto("Leite", "Parmalat", 10.5);
+		Produto p2 = new Produto("Leite integral", "Vale", 6.5);
+
+		Lote l1 = new Lote(p1, 10L);
+
+		// Adicionando produtos no catálogo
+		prodService.addProduto(p1);
+		prodService.addProduto(p2);
+
+		// Adicionando lotes no catálogo
+		loteService.addLote(l1);
+
+		// Consulta de produto "leite" no catálogo de produto
+		List<Produto> selection = prodService.listarProdByName("leite");
+		System.out.println(selection);
+
+		// Consulta de produto "leite" no catálogo de produto com lotes no sistema
+		List<Produto> selectionWithLote = prodService.listarProdsLoteByName("leite");
+		System.out.println(selectionWithLote);
 	}
 }
